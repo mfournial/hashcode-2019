@@ -10,10 +10,10 @@ import java.util.Set;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        dol("a");
-        dol("b");
-        /*
+        //dol("a");
+        //dol("b");
         dol("c");
+        /*
         dol("d");
         dol("e");
         */
@@ -31,28 +31,17 @@ public class Main {
         for (int i = 0; i < images; i++) {
             String line = reader.readLine();
             String[] l = line.split(" ");
-            int tags_num= Integer.parseInt(l[1]);
+            int tags_num = Integer.parseInt(l[1]);
             Set<Integer> tags = new HashSet<>(tags_num);
             for (int j = 2; j < 2 + tags_num; j++) {
                 tags.add(l[j].hashCode());
             }
+            all.add(new Photo(tags, i));
             if (l[0].equals("H")) {
-                all.add(new Photo(tags, i));
+                all.get(i).horizontal = true;
             } else {
-                vpics.add(new Shit(tags, i));
+                all.get(i).horizontal = false;
             }
-        }
-
-
-        if (0 != vpics.size() % 2) {
-            System.exit(-1);
-        }
-
-        for (int i = 0; i < vpics.size() -1; i +=2) {
-            Shit one = vpics.get(i);
-            Shit two = vpics.get(i+1);
-            one.tags.addAll(two.tags);
-            all.add(new Photo(one.tags, one.id, two.id));
         }
 
         List<Photo> slides = new ArrayList<>();
@@ -72,8 +61,28 @@ public class Main {
                 }
             }
             slides.add(current);
+            all.remove(best);
+
+            if(!best.horizontal) {
+                Photo bestV = best;
+                int bestScoreV = 0;
+                for (int i = 0; i < all.size(); i++) {
+                    if(!all.get(i).horizontal) {
+                            if (all.get(i).calculateScore(best) > bestScoreV) {
+                            bestV = all.get(i);
+                            bestScoreV = all.get(i).calculateScore(best);
+                        }
+                    }
+                }
+
+                best.tags.addAll(bestV.tags);
+                best.horizontal = true;
+                best.id2 = bestV.id;
+                all.remove(bestV);
+            }
+
             current = best;
-            all.remove(current);
+
         }
         slides.add(current);
 

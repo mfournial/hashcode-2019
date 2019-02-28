@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Photo {
-    final boolean horizontal;
+    boolean horizontal;
     final int id;
     int id2;
 final Set<Integer> tags;
