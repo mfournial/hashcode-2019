@@ -3,17 +3,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
 //        dol("a");
 //        dol("b");
-        dol("d");
+        dol("b");
         /*
         dol("c");
         dol("e");
@@ -49,20 +46,38 @@ public class Main {
             System.exit(-1);
         }
 
-        for (int i = 0; i < vpics.size() -1; i +=2) {
-            Shit one = vpics.get(i);
-            Shit two = vpics.get(i+1);
-            one.tags.addAll(two.tags);
-            all.add(new Photo(one.tags, one.id, two.id));
+        Shit currentS;
+        int bing = vpics.size();
+        while (!vpics.isEmpty()) {
+            currentS = vpics.get(vpics.size() -1 );
+            vpics.remove(currentS);
+            if(all.size() % 1000 == 0) {
+                System.out.println((double) (100 - 100 * (double) all.size() / (double) bing));
+            }
+            Shit best = vpics.get(0);
+            int bestScore =  best.cmp(currentS);
+            for (int i = 1; i < Math.min(vpics.size(), 7000); i++) {
+                if (vpics.get(i).cmp(currentS) > bestScore) {
+                    best = vpics.get(i);
+                    bestScore = vpics.get(i).cmp(currentS);
+                }
+            }
+            vpics.remove(best);
+            currentS.tags.addAll(best.tags);
+            all.add(new Photo(currentS.tags, currentS.id, best.id));
+
         }
+
+        Collections.shuffle(all);
 
         List<Photo> slides = new ArrayList<>();
 
         Photo current=  all.get(0);
         all.remove(current);
+        int start = all.size();
         while (!all.isEmpty()) {
             if(all.size() % 100 == 0) {
-                System.out.println("Progress");
+                System.out.println((double) (100 - 100 * (double) all.size() / (double) start));
             }
             Photo best = all.get(0);
             int bestScore =  best.calculateScore(current);
