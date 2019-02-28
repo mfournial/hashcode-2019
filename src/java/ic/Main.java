@@ -1,3 +1,4 @@
+package ic;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -10,11 +11,11 @@ import java.util.Set;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        dol("a");
-        dol("b");
+//        dol("a");
+//        dol("b");
+        dol("d");
         /*
         dol("c");
-        dol("d");
         dol("e");
         */
     }
@@ -65,7 +66,7 @@ public class Main {
             }
             Photo best = all.get(0);
             int bestScore =  best.calculateScore(current);
-            for (int i = 1; i < all.size(); i++) {
+            for (int i = 1; i < Math.min(all.size(), 3500); i++) {
                 if (all.get(i).calculateScore(current) > bestScore) {
                     best = all.get(i);
                     bestScore =all.get(i).calculateScore(current);

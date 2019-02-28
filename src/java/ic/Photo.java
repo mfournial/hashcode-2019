@@ -1,4 +1,4 @@
-import com.sun.deploy.util.StringUtils;
+package ic;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,7 +25,7 @@ final Set<Integer> tags;
 
     @Override
     public String toString() {
-        return (horizontal? "H " : "V ") + StringUtils.join(tags, " ");
+        return (horizontal? "H " : "V ");
     }
 
     public String output() {
