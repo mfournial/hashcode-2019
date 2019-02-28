@@ -2,16 +2,16 @@ package ic;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Shit {
+public class VPic {
     final Set<Integer> tags;
     final int id;
 
-    public Shit(Set<Integer> tags, int id) {
+    public VPic(Set<Integer> tags, int id) {
         this.tags = tags;
         this.id = id;
     }
 
-    public int cmp(Shit other) {
+    public int cmp(VPic other) {
         Set<Integer> currentSet =  new HashSet<>(this.tags);
         currentSet.retainAll(other.tags);
         Set<Integer> two = new HashSet(this.tags);
