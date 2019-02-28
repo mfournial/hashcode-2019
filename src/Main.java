@@ -2,21 +2,16 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         //dol("a");
-        //dol("b");
-        dol("c");
-        /*
-        dol("d");
+//        dol("b");
+//        dol("c");
+//        dol("d");
         dol("e");
-        */
     }
 
     public static void dol(String input) throws IOException {
@@ -46,7 +41,18 @@ public class Main {
 
         List<Photo> slides = new ArrayList<>();
 
+        Collections.shuffle(all);
         Photo current=  all.get(0);
+        int k = 0;
+        while(!current.horizontal) {
+            current = all.get(k);
+            k++;
+        }
+        if (current.horizontal) {
+            System.out.println("hhoresra");
+        } else {
+            System.out.println("vertical");
+        }
         all.remove(current);
         while (!all.isEmpty()) {
             if(all.size() % 100 == 0) {
@@ -54,33 +60,35 @@ public class Main {
             }
             Photo best = all.get(0);
             int bestScore =  best.calculateScore(current);
-            for (int i = 1; i < all.size(); i++) {
+            for (int i = 1; i < Math.min(10, all.size()); i++) {
                 if (all.get(i).calculateScore(current) > bestScore) {
                     best = all.get(i);
                     bestScore =all.get(i).calculateScore(current);
                 }
             }
-            slides.add(current);
             all.remove(best);
 
             if(!best.horizontal) {
-                Photo bestV = best;
-                int bestScoreV = 0;
-                for (int i = 0; i < all.size(); i++) {
+                Photo bestV = new Photo(new HashSet<>(), 9999999, 1);
+                int bestScoreV = -999;
+                for (int i = 0; i < Math.min(10, all.size()); i++) {
                     if(!all.get(i).horizontal) {
-                            if (all.get(i).calculateScore(best) > bestScoreV) {
+                            if (all.get(i).calculateScore(current) >= bestScoreV) {
                             bestV = all.get(i);
-                            bestScoreV = all.get(i).calculateScore(best);
+                            bestScoreV = all.get(i).calculateScore(current);
                         }
                     }
                 }
-
+                if(bestV.id == 9999999) {
+                    System.out.println(all.size());
+                    System.out.println("woops");
+                }
                 best.tags.addAll(bestV.tags);
-                best.horizontal = true;
+//                best.horizontal = true;
                 best.id2 = bestV.id;
                 all.remove(bestV);
             }
-
+            slides.add(best);
             current = best;
 
         }
